@@ -8,6 +8,14 @@
 # 2018-04-23
 # christian.werner@senckenberg.de
 #
+#
+# changes:
+# 2018-07-23: adapt to final 4 models
+#
+#
+# new variables:
+# precip_mm
+# 
 
 import math
 import os
@@ -29,10 +37,6 @@ import rpy2.robjects as robj
 from rpy2.robjects import pandas2ri
 pandas2ri.activate()
 
-# new model iteration provided by David
-fmodel = robj.r.readRDS("ModelDB.rds")
-
-
 # progressbar style
 pbar_widget = [pb.Bar('=', pb.FormatLabel("JDay: %(value)d ["), ']'),
                ' ', pb.Percentage(),
@@ -41,7 +45,7 @@ pbar_widget = [pb.Bar('=', pb.FormatLabel("JDay: %(value)d ["), ']'),
 
 
 
-def main(options, args):
+def main(options, args, fmodel):
 
     # pass some commandline args
     # TODO: check, this is actually domain and not month!!!
@@ -374,6 +378,10 @@ ___________________________________________
     parser.add_option("-c", "--coord", dest="coord",
                       default=None,
                       help="site location mode, run given lat,lon coord")
+    parser.add_option("-m", "--model", dest="model",
+                      default="model1.Rds",
+                      help="stats model")
+
 
     (options, args) = parser.parse_args()
 
@@ -387,6 +395,8 @@ ___________________________________________
         sys.stdout = f
         sys.stderr = f
 
+    # new model iteration provided by David
+    fmodel = robj.r.readRDS(options.model)
     print fmodel
 
-    main(options, args)
+    main(options, args, fmodel)
