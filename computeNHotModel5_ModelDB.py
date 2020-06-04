@@ -65,10 +65,7 @@ def main(options, args, fmodel):
         slon = float(x[1])  # site coordinate (lon)
 
     def spatialmode():
-        if SMODE==False:
-            return True
-        else:
-            return False
+        return SMODE==False
 
     # load data
     ds_soil = xr.open_dataset( "soil/GLOBAL_WISESOIL_D1%s.nc" % domain )
